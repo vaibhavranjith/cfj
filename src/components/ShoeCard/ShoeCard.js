@@ -31,19 +31,36 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+
+  var flagStyles = {
+    'on-sale':{
+      '--background-color':COLORS.primary,
+      '--content':"Sale"
+    },
+    'new-release':{
+      '--background-color':COLORS.secondary,
+      '--content':"New Release"
+    }
+  }
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
+          {variant === 'on-sale' || variant === 'new-release' ? <Flag style={flagStyles[variant]}>{variant === 'on-sale'? "Sale":"Just Released!"}</Flag>:<></>}
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price style={{
+            '--color':variant ==='on-sale' ? COLORS.gray[700]:undefined,
+            '--text-decoration':variant === 'on-sale' ? "line-through" :undefined
+          }}>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === 'on-sale' ? <SalePrice>{formatPrice(salePrice)}</SalePrice> : <></>}
         </Row>
       </Wrapper>
     </Link>
@@ -61,10 +78,14 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +93,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: var(--color);
+  text-decoration-line: var(--text-decoration);
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
@@ -83,4 +107,18 @@ const SalePrice = styled.span`
   color: ${COLORS.primary};
 `;
 
+
+const Flag = styled.div`
+  position: absolute;
+  top:12px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: ${14/18}rem;
+  right:-4px;
+  line-height: 32px;
+  font-weight: ${WEIGHTS.bold};
+  background-color: var(--background-color);
+  color: ${COLORS.white};
+  border-radius: 2px;
+`
 export default ShoeCard;
