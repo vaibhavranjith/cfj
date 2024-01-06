@@ -80,6 +80,7 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 10px;
 `;
 
 const Row = styled.div`
